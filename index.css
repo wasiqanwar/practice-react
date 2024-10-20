@@ -33,6 +33,7 @@
   margin: 5px;
   padding: 5px;
   width: 250px;
+  height: 400px;
   border: 1px solid white;
 }
 
@@ -75,4 +76,14 @@
 
 .filter {
   display: flex;
+}
+
+.res-card-link {
+  color: black;
+  text-decoration: none;
+}
+
+.user-card {
+  padding: 10px;
+  border: 1px solid black;
 }

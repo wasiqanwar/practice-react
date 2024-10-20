@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import RestaurantCard from "./RestaurantCard";
 import Shimmer from "./Shimmer";
+import { Link } from "react-router-dom";
 
 const Body = () => {
   const [listOfRes, setListOfRes] = useState([]);
@@ -13,7 +14,7 @@ const Body = () => {
 
   const fetchData = async () => {
     const received = await fetch(
-      "https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9352403&lng=77.624532&collection=83639&tags=layout_CCS_Biryani&sortBy=&filters=&type=rcv2&offset=0&page_type=null"
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9352403&lng=77.624532&collection=83639&tags=layout_CCS_Biryani&sortBy=&filters=&type=rcv2&offset=0&page_type=null"
     );
 
     const jsonData = await received?.json();
@@ -22,14 +23,13 @@ const Body = () => {
 
     let resArray = await jsonData?.data?.cards;
 
+    for (x = 0; x < 3; x++) {
+      resArray.shift();
+    }
     allRestraunts = resArray;
 
     setListOfRes(resArray);
     setFilteredRes(resArray);
-
-    for (x = 0; x < 3; x++) {
-      resArray.shift();
-    }
   };
 
   return listOfRes.length === 0 ? (
@@ -76,12 +76,34 @@ const Body = () => {
       </button> */}
       <div className="restaurant-container">
         {filteredRes.map((restaurant) => (
-          <RestaurantCard
+          <Link
+            className="res-card-link"
             key={restaurant?.card?.card?.info?.id}
-            restaurantsData={restaurant}
-          />
+            to={"/restaurant/" + restaurant?.card?.card?.info?.id}
+          >
+            <RestaurantCard restaurantsData={restaurant} />
+          </Link>
         ))}
       </div>
+      {/* <button
+        onClick={async () => {
+          const update = await fetch(
+            "https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/list/update",
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "https://www.swiggy.com/",
+              },
+              body: await JSON.stringify({}),
+            }
+          );
+          console.log(update);
+        }}
+      >
+        Load more
+      </button> */}
     </div>
   );
 };
